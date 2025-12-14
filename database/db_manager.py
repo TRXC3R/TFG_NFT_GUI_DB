@@ -7,8 +7,9 @@ import sqlite3
 import bcrypt
 from datetime import datetime
 from pathlib import Path
+import database.db_models as db_models
 
-DB_PATH = Path("./database/users_database.db")
+DB_PATH = Path("./database/TFG_database.db")
 
 class DatabaseManager:
     def __init__(self, db_path=DB_PATH):
@@ -25,18 +26,29 @@ class DatabaseManager:
     def init_db(self):
         conn = sqlite3.connect(DB_PATH)
         cur = conn.cursor()
-        cur.execute("""
+        '''cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL
         );
-        """)
+        CREATE TABLE IF NOT EXISTS images (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            prompt TEXT NOT NULL
+            seed INTEGER NOT NULL,
+            style TEXT NOT NULL,
+            file_path TEXT NOT NULL,
+            metadata TEXT
+        );
+        """)'''
+        #cur.execute da error porque no puede ejecutar múltiples sentencias a la vez
+        cur.executescript(db_models.DATABASE_SCHEMA)
         conn.commit()
         conn.close()
     
     # ==================== USUARIOS ====================
-    def create_user(self, username: str, password: str, email: str = None) -> bool:
+    def create_user(self, username: str, password: str) -> bool:
         """Crea un nuevo usuario con contraseña hasheada"""
         try:
             password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
@@ -84,9 +96,9 @@ class DatabaseManager:
         metadata_json = json.dumps(metadata) if metadata else None
         cursor.execute(
             """INSERT INTO images 
-               (user_id, prompt, style, seed, file_path, metadata)
+               (user_id, prompt, seed, style, file_path, metadata)
                VALUES (?, ?, ?, ?, ?, ?)""",
-            (user_id, prompt, style, seed, file_path, metadata_json)
+            (user_id, prompt, seed, style, file_path, metadata_json)
         )
         conn.commit()
         image_id = cursor.lastrowid

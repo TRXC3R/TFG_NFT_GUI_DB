@@ -8,8 +8,7 @@ from database.db_manager import db
 ctk.set_appearance_mode("dark")     # "light", "dark" o "system"
 ctk.set_default_color_theme("blue") # puedes usar "dark-blue", "green", etc. // Se puede implementar más adelante una pestaña de configuración del sistema.
 
-#DB_PATH = Path("./database/users.csv")
-DB_PATH = Path("./database/users_database.db")
+DB_PATH = Path("./database/TFG_database.db")
 
 class LoginFrame(ctk.CTkFrame):
     def __init__(self, master, on_login_success, on_register, **kwargs):
@@ -84,22 +83,7 @@ class LoginFrame(ctk.CTkFrame):
             self.on_login_success(username, None)
         else:
             messagebox.showerror("Error", "Credenciales incorrectas.")
-            
-
-    #Este método no se usa, en vez de hacer la consulta a un csv en claro utilizo sqlite y hago una consulta a una base de datos con contraseñas encriptadas
-    def check_credentials_from_db(self, username: str, password: str) -> bool:
-        #Devuelve True si (username, password) se encuentra en el CSV, False si no.
-        if not DB_PATH.exists():
-            return False  #Podría lanzar una excepción si no 
-
-        with DB_PATH.open("r", newline="", encoding="utf-8") as f:
-            reader = csv.DictReader(f)  # espera cabeceras: username,password
-            for row in reader:
-                file_user = row.get("username", "").strip()
-                file_pass = row.get("password", "").strip()
-                if username == file_user and password == file_pass:
-                    return True
-        return False
+        
     
     #Se hacen consultas a base de datos con usuarios y contraseñas encriptadas
     def check_credentials_from_sqlite_db(self, username: str, password: str) -> bool:

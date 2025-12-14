@@ -9,7 +9,6 @@ from database.db_manager import db
 ctk.set_appearance_mode("dark")     # "light", "dark" o "system"
 ctk.set_default_color_theme("blue") # puedes usar "dark-blue", "green", etc. // Se puede implementar más adelante una pestaña de configuración del sistema.
 
-DB_PATH = Path("./database/users.csv")
 
 class RegisterFrame(ctk.CTkFrame):
     def __init__(self, master, on_register_success, **kwargs):
@@ -68,33 +67,15 @@ class RegisterFrame(ctk.CTkFrame):
 
         # Llamar API / base de datos aquí.
 
-
-    #Versión anticuada, ya no se registran usuarios en un csv, se registran usuarios en una basde de datos, usar add_user_toDB mejor
-    def add_user_toCSV(self, username: str, password: str):
-        file_exists = DB_PATH.exists()
-
-        # AQUÍ: abrimos el Path, no usamos DictWriter sobre DB_PATH directamente
-        with DB_PATH.open("a", newline="", encoding="utf-8") as f:
-            fieldnames = ["username", "password"]
-            writer = csv.DictWriter(f, fieldnames=fieldnames)  # DictWriter(f), no DB_PATH
-
-            if not file_exists:
-                writer.writeheader()
-
-            writer.writerow({
-                "username": username,
-                "password": password,
-            })
         
-
     def add_user_toDB(self, username: str, password: str):
-            #Crea el usuario en la base de datos de sqlite
-            if db.create_user(username=username, password= password, email= None) == False:            
-                messagebox.showwarning(title="Ya existe un usuario con ese nombre", 
-                                       message="Pruebe con otro nombre de usuario. \n \n" \
-                                       "Abortando registro de usuario.", icon="warning")
-            else:
-                 messagebox.showwarning(title="Felicidades!", message= "Usuario creado con éxito", icon="info")
+        #Crea el usuario en la base de datos de sqlite
+        if db.create_user(username=username, password= password) == False:            
+            messagebox.showwarning(title="Ya existe un usuario con ese nombre", 
+                                    message="Pruebe con otro nombre de usuario. \n \n" \
+                                    "Abortando registro de usuario.", icon="warning")
+        else:
+            messagebox.showwarning(title="Felicidades!", message= "Usuario creado con éxito", icon="info")
 
 
     
