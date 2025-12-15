@@ -1,5 +1,6 @@
 import customtkinter as ctk
 import os 
+import webbrowser
 
 class MenuFrame(ctk.CTkFrame):
     def __init__(self, master, username, on_back=None, on_restore_image = None, on_cerrar_sesion = None, **kwargs):
@@ -26,12 +27,14 @@ class MenuFrame(ctk.CTkFrame):
         )
         back_button.grid(row=0, column=0, sticky="w")
 
-        '''title = ctk.CTkLabel(
+        back_button = ctk.CTkButton(
             header_frame,
-            text="Menu",
-            font=ctk.CTkFont(size=22, weight="bold")
+            text="Ver Galería de la Comunidad",
+            width=80,
+            command= lambda: self._open_gallery()
         )
-        title.grid(row=0, column=1, sticky="w")'''
+        back_button.grid(row=0, column=2, sticky="w")
+
         
         text_label = ctk.CTkLabel(
             header_frame,
@@ -70,6 +73,7 @@ class MenuFrame(ctk.CTkFrame):
             image_files = []
         if image_files:
             for idx, image_file in enumerate(image_files):
+
                 #Listar las imagenes en el directorio de cada persona
                 image_label = ctk.CTkLabel(
                     images_frame,
@@ -77,8 +81,8 @@ class MenuFrame(ctk.CTkFrame):
                     font=ctk.CTkFont(size=14)
                 )
                 image_label.grid(row=idx + 1, column=0, sticky="w", padx=40, pady=2)
-                #Asignar un boton para recuperar la imagen 
 
+                #Asignar un boton para recuperar la imagen 
                 restore_image_button = ctk.CTkButton(
                     images_frame, text="Restaurar imagen",
                     width=80,
@@ -110,3 +114,8 @@ class MenuFrame(ctk.CTkFrame):
     def cerrar_sesion(self):
         if self.on_cerrar_sesion:
             self.on_cerrar_sesion()
+
+    def _open_gallery(self):
+        # URL donde corre la web con la galeria
+        url = "http://127.0.0.1:8000/gallery"
+        webbrowser.open(url)

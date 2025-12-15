@@ -3,7 +3,6 @@ import os
 import customtkinter as ctk
 from tkinter import messagebox
 from PIL import Image
-from generate_image import start_generation_thread, generate_image
 import api.sd_api as sd_api
 
 
