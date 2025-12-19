@@ -1,8 +1,8 @@
 from pathlib import Path
-import csv
 import customtkinter as ctk
 from tkinter import messagebox
 from database.db_manager import db
+import database.supabase_db_manager as supabase_db
 
 # Configuración global de apariencia
 ctk.set_appearance_mode("dark")     # "light", "dark" o "system"
@@ -79,11 +79,11 @@ class LoginFrame(ctk.CTkFrame):
             return
 
         # Llamar API / base de datos aquí.
-        if self.check_credentials_from_sqlite_db(username, password):
+        if supabase_db.check_user_credentials(username, password):
             self.on_login_success(username, None)
         else:
             messagebox.showerror("Error", "Credenciales incorrectas.")
-        
+
     
     #Se hacen consultas a base de datos con usuarios y contraseñas encriptadas
     def check_credentials_from_sqlite_db(self, username: str, password: str) -> bool:
@@ -100,7 +100,7 @@ class LoginFrame(ctk.CTkFrame):
             #print(f"[DEBUG]: {user_name} tiene id: {id_usuario}")
             return True
         return False    
-    
+
     def _new_user_register(self):
         if self.on_register:
             self.on_register()

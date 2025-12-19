@@ -1,14 +1,13 @@
-import sqlite3
 from pathlib import Path
 import customtkinter as ctk
 from tkinter import messagebox
-import csv
 from database.db_manager import db
+import database.supabase_db_manager as supabase_db
+import random
 
 # Configuración global de apariencia
 ctk.set_appearance_mode("dark")     # "light", "dark" o "system"
 ctk.set_default_color_theme("blue") # puedes usar "dark-blue", "green", etc. // Se puede implementar más adelante una pestaña de configuración del sistema.
-
 
 class RegisterFrame(ctk.CTkFrame):
     def __init__(self, master, on_register_success, **kwargs):
@@ -62,20 +61,19 @@ class RegisterFrame(ctk.CTkFrame):
         password = self.password_entry.get().strip()
 
         #print(f"[DEBUG] Intentando registrar con username='{username}' y password='{password}'")
-        self.add_user_toDB(username, password)
+        self.add_user_to_TFG_DB(username, password)
         self.on_register_success()  
 
         # Llamar API / base de datos aquí.
 
-        
-    def add_user_toDB(self, username: str, password: str):
+    def add_user_to_TFG_DB(self, username: str, password: str):
         #Crea el usuario en la base de datos de sqlite
-        if db.create_user(username=username, password= password) == False:            
-            messagebox.showwarning(title="Ya existe un usuario con ese nombre", 
-                                    message="Pruebe con otro nombre de usuario. \n \n" \
-                                    "Abortando registro de usuario.", icon="warning")
-        else:
-            messagebox.showwarning(title="Felicidades!", message= "Usuario creado con éxito", icon="info")
+        supabase_db.create_tfg_user(
+            id = random.randint(100000, 999999),
+            username = username,
+            password = password
+            )
+        messagebox.showwarning(title="Felicidades!", message= "Usuario creado con éxito", icon="info")
 
 
     
