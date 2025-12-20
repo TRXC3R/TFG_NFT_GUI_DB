@@ -3,8 +3,8 @@ import datetime
 import bcrypt
 
 DRM_TFG_URL = "https://tujlnbhnttgyztknwibf.supabase.co"
-DRM_ANON_TFG_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1amxuYmhudHRneXp0a253aWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjMzODYsImV4cCI6MjA4MTczOTM4Nn0.WtnWMysAy4EaJSnfAm1l_w5FikZcHL_xs4VrQ4UlLjk"
-DRM_SECRET_TFG_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1amxuYmhudHRneXp0a253aWJmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjE2MzM4NiwiZXhwIjoyMDgxNzM5Mzg2fQ.1AXHFKHNen6UdKTmoEFBBgAfz_7_WWINqFHJJ550opU"
+DRM_ANON_TFG_KEY = ""
+DRM_SECRET_TFG_KEY = ""
 
 supabase_drm_tfg: Client = create_client(DRM_TFG_URL, DRM_SECRET_TFG_KEY)
 
