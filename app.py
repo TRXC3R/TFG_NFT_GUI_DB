@@ -47,11 +47,11 @@ class App(ctk.CTk):
         )
         self.current_frame.pack(fill="both", expand=True)
 
-    def show_nft_page(self, username: str, img):
+    def show_nft_page(self, user_id: str, img):
         self.clear_frame()
         self.current_frame = NFTFrame(
             master=self.container,
-            username=username,
+            user_id=user_id,
             img = img,
             on_generate_callback=self.on_generate_nft,
             on_click_menu=self.show_menu_page, 
@@ -59,11 +59,11 @@ class App(ctk.CTk):
         )
         self.current_frame.pack(fill="both", expand=True)
 
-    def show_menu_page(self, username: str):
+    def show_menu_page(self, user_id: str):
         self.clear_frame()
         self.current_frame = MenuFrame(
             master=self.container,
-            username=username,
+            user_id=user_id,
             on_back=self.show_nft_page,
             on_restore_image=self.show_nft_page,
             on_cerrar_sesion=self.show_login

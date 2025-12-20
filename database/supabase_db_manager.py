@@ -8,22 +8,16 @@ DRM_SECRET_TFG_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 supabase_drm_tfg: Client = create_client(DRM_TFG_URL, DRM_SECRET_TFG_KEY)
 
-#Mi informacion en ficu
-#{"id":"cb4df51f-f00a-4417-b2f5-a653a0608d1f",
-# "name":"Darío Márquez Ibáñez",
-# "password_hash":"A65A1B03",
-# "created_at":"2025-11-03T15:58:01.523+00:00"
 
-
-def search_user():
-    response = supabase_drm_tfg.table("users").select("*").limit(100).execute()
+#Funcion que busca un usuario por su ID y devuelve su nombre de usuario
+def search_user(username):
+    response = supabase_drm_tfg.table("users").select("*").eq("username", username).execute()
     print("Registro encontrado:")
     for row in response.data:
-        #print(f"ID: '{row['id']}' | Nombre: {row['name']}")
-        id = row['id']
-        username = row['username']
+        user_id = row['id']
         password_hash = row['password_hash']
         print(f"Se han encontrado los datos de: ID: '{row['id']}' | Nombre: {row['username']}")
+    return user_id
 
 def check_user_credentials_old(username, password):
     
@@ -98,3 +92,19 @@ def create_tfg_user(id, username, password):
     )
 
     # print(resp.data)
+
+def upload_image_metadata(user_id: str, prompt: str, file_url: str):
+    new_image = {
+        "user_id": user_id,
+        "prompt": prompt,
+        "file_url": file_url,
+    }
+
+    resp = (
+        supabase_drm_tfg
+        .table("images")
+        .insert(new_image)
+        .execute()
+    )
+
+    print(f"[DEBUG] Metadatos de imagen subidos para el usuario {user_id}: {resp.data}")

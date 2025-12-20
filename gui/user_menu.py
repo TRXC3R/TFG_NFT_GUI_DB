@@ -3,9 +3,9 @@ import os
 import webbrowser
 
 class MenuFrame(ctk.CTkFrame):
-    def __init__(self, master, username, on_back=None, on_restore_image = None, on_cerrar_sesion = None, **kwargs):
+    def __init__(self, master, user_id, on_back=None, on_restore_image = None, on_cerrar_sesion = None, **kwargs):
         super().__init__(master, **kwargs)
-        self.username = username
+        self.user_id = user_id
         self.on_back= on_back
         self.on_restore_image = on_restore_image
         self.on_cerrar_sesion = on_cerrar_sesion
@@ -38,7 +38,7 @@ class MenuFrame(ctk.CTkFrame):
         
         text_label = ctk.CTkLabel(
             header_frame,
-            text=f"{self.username}",
+            text=f"{self.user_id}",
             font=ctk.CTkFont(size=20)
         )
         text_label.grid(row=0, column=3, sticky="e")
@@ -66,7 +66,7 @@ class MenuFrame(ctk.CTkFrame):
 
 
         # Lógica para listar las imágenes del usuario
-        user_image_dir = f'./output_images/{self.username}'
+        user_image_dir = f'./output_images/{self.user_id}'
         if os.path.exists(user_image_dir):
             image_files = os.listdir(user_image_dir)
         else:
@@ -100,13 +100,13 @@ class MenuFrame(ctk.CTkFrame):
     
     def go_back_to_nft_page(self):
         if self.on_back:
-            self.on_back(self.username, img = None)
+            self.on_back(self.user_id, img = None)
 
     def restore_image(self, image_path):
-        file = f"./output_images/{self.username}/{image_path}"
+        file = f"./output_images/{self.user_id}/{image_path}"
         print(f"Se quiere recuperar la imagen {file}")
         if self.on_restore_image:
-            self.on_restore_image(self.username, img = file)
+            self.on_restore_image(self.user_id, img = file)
 
     def mostrar_ruta_imagen(self, path): #No se usa
         print(path)

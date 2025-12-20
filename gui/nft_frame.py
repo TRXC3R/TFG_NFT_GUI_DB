@@ -12,9 +12,9 @@ ctk.set_default_color_theme("blue") # puedes usar "dark-blue", "green", etc.
 
 
 class NFTFrame(ctk.CTkFrame):
-    def __init__(self, master, username, img, on_generate_callback=None, on_click_menu= None, on_imagen_generada = None, **kwargs):
+    def __init__(self, master, user_id, img, on_generate_callback=None, on_click_menu= None, on_imagen_generada = None, **kwargs):
         super().__init__(master, **kwargs)
-        self.username = username
+        self.user_id = user_id
         self.on_generate_callback = on_generate_callback
         self.on_click_menu = on_click_menu
         self.on_imagen_generada = on_imagen_generada
@@ -24,12 +24,12 @@ class NFTFrame(ctk.CTkFrame):
         self.grid_columnconfigure((0, 1), weight=1)
 
         #Verificar que el usuario tiene su carpeta de imágenes
-        user_image_dir = f'./output_images/{self.username}'
+        user_image_dir = f'./output_images/{self.user_id}'
         if not os.path.exists(user_image_dir):
             os.makedirs(user_image_dir)
-            print(f"[DEBUG] Creada carpeta de imágenes para el usuario '{self.username}' en '{user_image_dir}'")
-        else:
-            print(f"[DEBUG] Carpeta de imágenes para el usuario '{self.username}' ya existe en '{user_image_dir}'") 
+            #print(f"[DEBUG] Creada carpeta de imágenes para el usuario '{self.user_id}' en '{user_image_dir}'")
+        #else:
+            #print(f"[DEBUG] Carpeta de imágenes para el usuario '{self.user_id}' ya existe en '{user_image_dir}'") 
             
 
         # Cabecera
@@ -47,7 +47,7 @@ class NFTFrame(ctk.CTkFrame):
 
         user_label = ctk.CTkLabel(
             header_frame,
-            text=f"Conectado como: {self.username}",
+            text=f"Conectado como: {self.user_id}",
             font=ctk.CTkFont(size=12)
         )
         user_label.grid(row=0, column=1, sticky="e")
@@ -174,13 +174,13 @@ class NFTFrame(ctk.CTkFrame):
         
         if not prompt:
             messagebox.showwarning("Prompt vacío", "Por favor, escribe un prompt para el NFT.")
-            print("[DEBUG] Prompt vacío, no se genera imagen.")
+            #print("[DEBUG] Prompt vacío, no se genera imagen.")
         else:
             #   - Llamar a tu API de IA
             #   - Guardar imagen, mintear NFT, etc.
 
             #Enseñar por consola para verificar que se recogen bien los datos
-            print(f"[DEBUG] Generando NFT con estilo='{style}' y prompt='{prompt[:60]}...'")
+            #print(f"[DEBUG] Generando NFT con estilo='{style}' y prompt='{prompt[:60]}...'")
 
             # Mostrar mensaje de generación, hay que presionar ok para continuar
             messagebox.showinfo(
@@ -189,18 +189,18 @@ class NFTFrame(ctk.CTkFrame):
             )
 
             # Llamar a la función de generación de imagen
-            #imagen_generada = generate_image(prompt, style, steps, username=self.username)
-            #imagen_generada = start_generation_thread(prompt, style, steps, username=self.username)
-            imagen_generada = sd_api.generate_image(self.username, prompt, style, steps, 0)
+            # He forzado el user_id a 595658 (Darío Márquez Ibáñez) para pruebas
+            imagen_generada = sd_api.generate_image(user_id=self.user_id, prompt=prompt, style=style, num_steps=steps, task_id=0)
+            
             #Una vez generada la imagen Actualizar previsualización
             self.actualizar_previsualizacion(imagen_generada)
         
     def show_menu(self):
         if self.on_click_menu:
-            self.on_click_menu(self.username)
+            self.on_click_menu(self.user_id)
 
     def actualizar_previsualizacion(self, imagen_generada):
         if self.on_imagen_generada:
-            self.on_imagen_generada(self.username, imagen_generada)
+            self.on_imagen_generada(self.user_id, imagen_generada)
         
 

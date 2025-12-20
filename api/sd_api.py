@@ -3,6 +3,8 @@ import base64
 import threading
 import time
 from pathlib import Path
+from database.supabase_db_manager import upload_image_metadata
+
 
 BASE_URL = "http://127.0.0.1:7860"
 OUTPUT_DIR = Path("./output_images")
@@ -63,6 +65,9 @@ def generate_image(user_id: int, prompt: str, style: str, num_steps: int,
         task.result_path = str(file_path)
         #task.image_id = image_id
         
+        #Subir metadatos a la base de datos
+        upload_image_metadata(user_id, prompt, str(file_path))
+
         print(f"✅ Imagen guardada: {file_path}")
         return file_path
         

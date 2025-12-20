@@ -71,8 +71,8 @@ class LoginFrame(ctk.CTkFrame):
         username = self.username_entry.get().strip()
         password = self.password_entry.get().strip()
 
-        print(f"[DEBUG] Intentando login con username='{username}' y password='{password}'")
-
+        #print(f"[DEBUG] Intentando login con username='{username}' y password='{password}'")
+        
         # Aquí deberías sustituir esta validación básica por tu lógica real
         if not username or not password:
             messagebox.showwarning("Error", "Usuario y contraseña son obligatorios.")
@@ -80,26 +80,10 @@ class LoginFrame(ctk.CTkFrame):
 
         # Llamar API / base de datos aquí.
         if supabase_db.check_user_credentials(username, password):
-            self.on_login_success(username, None)
+            user_id = supabase_db.search_user(username)
+            self.on_login_success(user_id, None)
         else:
             messagebox.showerror("Error", "Credenciales incorrectas.")
-
-    
-    #Se hacen consultas a base de datos con usuarios y contraseñas encriptadas
-    def check_credentials_from_sqlite_db(self, username: str, password: str) -> bool:
-        #Devuelve True si (username, password) se encuentra en el CSV, False si no.
-        if not DB_PATH.exists():
-            return False  #Podría lanzar una excepción si no 
-
-        #Verifica que el username y el password concuerden         
-        user = db.verify_user(username, password)
-
-        if user is not None:
-            id_usuario = user["id"]
-            user_name = user["username"]
-            #print(f"[DEBUG]: {user_name} tiene id: {id_usuario}")
-            return True
-        return False    
 
     def _new_user_register(self):
         if self.on_register:
