@@ -6,8 +6,6 @@ from gui.user_menu import MenuFrame
 from gui.register import RegisterFrame
 from database.db_manager import db
 
-
-
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()

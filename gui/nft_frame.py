@@ -3,7 +3,8 @@ import os
 import customtkinter as ctk
 from tkinter import messagebox
 from PIL import Image
-import api.sd_api as sd_api
+import api.sd_api_gcolab as sd_api_gcolab
+import api.sd_api_local as sd_api_local
 
 
 # Configuración global de apariencia
@@ -190,8 +191,9 @@ class NFTFrame(ctk.CTkFrame):
 
             # Llamar a la función de generación de imagen
             # He forzado el user_id a 595658 (Darío Márquez Ibáñez) para pruebas
-            imagen_generada = sd_api.generate_image(user_id=self.user_id, prompt=prompt, style=style, num_steps=steps, task_id=0)
-            
+            imagen_generada = sd_api_gcolab.generate_image(user_id=self.user_id, prompt=prompt, style=style, num_steps=steps, task_id=0)
+            #imagen_generada = sd_api_local.generate_image(user_id=self.user_id, prompt=prompt, style=style, num_steps=steps, task_id=0)
+
             #Una vez generada la imagen Actualizar previsualización
             self.actualizar_previsualizacion(imagen_generada)
         

@@ -8,7 +8,6 @@ DRM_SECRET_TFG_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 supabase_drm_tfg: Client = create_client(DRM_TFG_URL, DRM_SECRET_TFG_KEY)
 
-
 #Funcion que busca un usuario por su ID y devuelve su nombre de usuario
 def search_user(username):
     response = supabase_drm_tfg.table("users").select("*").eq("username", username).execute()
@@ -18,29 +17,6 @@ def search_user(username):
         password_hash = row['password_hash']
         print(f"Se han encontrado los datos de: ID: '{row['id']}' | Nombre: {row['username']}")
     return user_id
-
-def check_user_credentials_old(username, password):
-    
-    password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-    print(f"[DEBUG] Hash de la contraseña para verificación: {password_hash}")
-
-    response = (
-        supabase_drm_tfg
-        .table("users")
-        .select("*")
-        .eq("username", username)
-        .eq("password_hash", password_hash)
-        .execute()
-    )
-
-    if response.data:
-        print(f"[DEBUG] Usuario '{username}' autenticado correctamente en Supabase.")
-        return True
-    else:
-        print(f"[DEBUG] Fallo de autenticación para el usuario '{username}' en Supabase.")
-        print(f"[DEBUG] Datos recibidos: {response.data}")
-        return False
-
 
 def check_user_credentials(username: str, password: str):
     # 1. Buscar solo por username para asegurarnos de que el usuario existe en la base de datos
@@ -93,10 +69,11 @@ def create_tfg_user(id, username, password):
 
     # print(resp.data)
 
-def upload_image_metadata(user_id: str, prompt: str, file_url: str):
+def upload_image_metadata(user_id: str, prompt: str, style: str, file_url: str):
     new_image = {
         "user_id": user_id,
         "prompt": prompt,
+        "style": style,
         "file_url": file_url,
     }
 

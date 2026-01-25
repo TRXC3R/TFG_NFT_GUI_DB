@@ -66,7 +66,7 @@ def generate_image(user_id: int, prompt: str, style: str, num_steps: int,
         #task.image_id = image_id
         
         #Subir metadatos a la base de datos
-        upload_image_metadata(user_id, prompt, str(file_path))
+        upload_image_metadata(user_id, prompt, style, str(file_path))
 
         print(f"✅ Imagen guardada: {file_path}")
         return file_path
